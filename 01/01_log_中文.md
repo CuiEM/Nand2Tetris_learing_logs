@@ -1,12 +1,3 @@
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
 
 ## 第一章：布尔逻辑
 
@@ -26,10 +17,15 @@
 根据书本以及讲课的定义：
 
 $$
-a\  {\text{Nand}}\ b = \overline{a \times b} \\
-\text{Not} \ (a) = \overline{a}\\
+a\  {\text{Nand}}\ b = \overline{a \times b}
 $$
+
+$$
+\text{Not} \ (a) = \overline{a}
+$$
+
 因此我们可以推断出：
+
 $$
 a\ {\text{And}} \ b = a\times b =\overline{\overline{a \times b}}= \text{Not}(a \ \text{Nand} \ b)
 $$
@@ -43,6 +39,7 @@ $$
 $$
 a\ {\text{And}} \ b = (a \ \text{Nand} \ b)\ \text{Nand}\ (\text{True})
 $$
+
 如图：
 
 ![And](figure\and_nand_2.svg)
@@ -64,6 +61,7 @@ $$
 ### 二、Not 逻辑实现
 
 这个就比较简单了，直接通过输入和 True 的 Nand 逻辑实现：
+
 $$
 \text{Not} \ (a) = a \  \text{Nand} \ \text{True} = \overline{a \times \text{True}}
 $$ 
@@ -71,6 +69,7 @@ $$
 ### 三、Or 逻辑实现
 
 在书中就已经告诉了我们：
+
 $$
 a \ \text{Or} \ b = (a\ \text{Nand} \ a)\ \text{Nand}\ (b \  \text{Nand} \ b)
 $$
