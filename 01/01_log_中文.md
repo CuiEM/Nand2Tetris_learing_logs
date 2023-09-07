@@ -1,12 +1,3 @@
-<style>
-.center 
-{
-  width: auto;
-  display: table;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
 
 ## 第一章：布尔逻辑
 
@@ -29,7 +20,9 @@ $$
 a\  {\text{Nand}}\ b = \overline{a \times b} \\
 \text{Not} \ (a) = \overline{a}\\
 $$
+
 因此我们可以推断出：
+
 $$
 a\ {\text{And}} \ b = a\times b =\overline{\overline{a \times b}}= \text{Not}(a \ \text{Nand} \ b)
 $$
@@ -43,34 +36,37 @@ $$
 $$
 a\ {\text{And}} \ b = (a \ \text{Nand} \ b)\ \text{Nand}\ (\text{True})
 $$
+
 如图：
 
 ![And](figure\and_nand_2.svg)
 
-对 x 和 y 各个情况进行讨论列出下表： 
+对 x 和 y 各个情况进行讨论列出下表：
 
 <div class="center">
 
-|    Key   | Value |   |   |   |
-|:--------:|:-----:|:-:|:-:|:-:|
-| a        | 1     | 1 | 0 | 0 |
-| b        | 1     | 0 | 1 | 0 |
-| a Nand b | 0     | 1 | 1 | 1 |
-| TRUE     | 1     | 1 | 1 | 1 |
-| out      | 1     | 0 | 0 | 0 |
+|   Key   | Value |  |  |  |
+| :------: | :---: | :-: | :-: | :-: |
+|    a    |   1   | 1 | 0 | 0 |
+|    b    |   1   | 0 | 1 | 0 |
+| a Nand b |   0   | 1 | 1 | 1 |
+|   TRUE   |   1   | 1 | 1 | 1 |
+|   out   |   1   | 0 | 0 | 0 |
 
 </div>
 
 ### 二、Not 逻辑实现
 
 这个就比较简单了，直接通过输入和 True 的 Nand 逻辑实现：
+
 $$
 \text{Not} \ (a) = a \  \text{Nand} \ \text{True} = \overline{a \times \text{True}}
-$$ 
+$$
 
 ### 三、Or 逻辑实现
 
 在书中就已经告诉了我们：
+
 $$
 a \ \text{Or} \ b = (a\ \text{Nand} \ a)\ \text{Nand}\ (b \  \text{Nand} \ b)
 $$
@@ -89,13 +85,11 @@ $$
 
 这个门的原理是根据输入变量 “Sel” 为 1 或者 0 分别选择输出为 a 或者 b。即如果 sel 是 0，那么输出 out = a，如果 Sel = 1，那么输出 out = b。
 
-
 首先我们先实现输出等于输入，即 in = a, out = a：
 
 $$
 a = \text{Or}(a, 0)
 $$
-
 
 那么我们可以先搭个基本框架：
 
@@ -107,8 +101,9 @@ $$
 
 1. Sel = 0, 那么 $\text{Part1}(a,\ Sel)=\text{Part1}(a,\ 0)=a,\  \text{Part2}(b,\ Sel)=\text{Part2}(b,\ 0)=0$
 2. Sel = 1, 那么 $\text{Part1}(a,\ Sel)=\text{Part1}(a,\ 1)=0,\  \text{Part2}(b,\ Sel)=\text{Part2}(b,\ 1)=b$
-   
+
 我们发现当 $\text{Part2}$ 是 $\text{And}$ , 而 $\text{Part2}$ 却没有可以匹配的，但我们可以转换 $Sel$ 的值为 $\text{Not}(Sel)$ ，我们可以得到我们的整个公式了：
+
 $$
 \text{Mux} = \text{Or}(\text{And}(a,\ \text{Not}(Sel)), \ \text{And}(b,\ Sel))
 $$
@@ -166,7 +161,6 @@ m 个 n 位输入变量中选取一个 n 位输出，然而输入变量 $Sel$ �
 ![Alt text](figure\failure1.png)
 
 2. 本人的邮箱是 dongshancui73@gmail.com，有任何问题请邮件联系，因本人还在上学，大概率不会及时回复。
-
 3. 官方答疑网址：
 
 http://nand2tetris-questions-and-answers-forum.52.s1.nabble.com/
