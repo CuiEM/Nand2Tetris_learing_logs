@@ -1,0 +1,8 @@
+ CHIP Neg {
+
+    IN in[16];
+    OUT out;
+
+    PARTS:
+    And(a = in[15], b = true, out = out);
+}
