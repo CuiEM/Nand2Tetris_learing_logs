@@ -6,6 +6,7 @@ Updating...
 
 * [第一章](https://github.com/CuiEM/Nand2Tetris_learing_logs/blob/master/01/01_log_%E4%B8%AD%E6%96%87.md)
 * [第二章](https://github.com/CuiEM/Nand2Tetris_learing_logs/blob/master/02/02_log_%E4%B8%AD%E6%96%87.md)
-*
+* [第三章](https://github.com/CuiEM/Nand2Tetris_learing_logs/blob/master/03/03_log_%E4%B8%AD%E6%96%87.md)
+* 。。。
 
 Updating...
