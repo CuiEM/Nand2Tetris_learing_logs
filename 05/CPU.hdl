@@ -1,0 +1,89 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * The Central Processing unit (CPU).
+ * Consists of an ALU and a set of registers, designed to fetch and 
+ * execute instructions written in the Hack machine language.
+ * In particular, functions as follows:
+ * Executes the inputted instruction according to the Hack machine 
+ * language specification. The D and A in the language specification
+ * refer to CPU-resident registers, while M refers to the external
+ * memory location addressed by A, i.e. to Memory[A]. The inM input 
+ * holds the value of this location. If the current instruction needs 
+ * to write a value to M, the value is placed in outM, the address 
+ * of the target location is placed in the addressM output, and the 
+ * writeM control bit is asserted. (When writeM=0, any value may 
+ * appear in outM). The outM and writeM outputs are combinational: 
+ * they are affected instantaneously by the execution of the current 
+ * instruction. The addressM and pc outputs are clocked: although they 
+ * are affected by the execution of the current instruction, they commit 
+ * to their new values only in the next time unit. If reset=1 then the 
+ * CPU jumps to address 0 (i.e. sets pc=0 in next time unit) rather 
+ * than to the address resulting from executing the current instruction. 
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset=1) or continue executing
+                         // the current program (reset=0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write into M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+    // Put your code here:
+
+    // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // 1  1  1  a  c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
+
+    //1.1
+    And(a=instruction[15], b=true, out=instructionC);
+    Not(in=instructionC, out=instructionA);
+    
+    //1.2
+    Mux16(a=outALU, b=instruction, sel=instructionA, out=inA);
+    
+    //1.3
+    And(a=instructionC, b=instruction[5], out=instCAndDestA);
+    Or(a=instructionA, b=instCAndDestA, out=loadA);
+    And(a=instructionC, b=instruction[4], out=loadD);
+    
+    //1.4
+    ARegister(in=inA, load=loadA, out=outA, out[0..14]=addressM);
+    DRegister(in=inD, load=loadD, out=outD);
+    
+    //1.5
+    Mux16(a=outA, b=inM, sel=instruction[12], out=aluInY);
+
+    //1.6
+    ALU(x=outD, y=aluInY, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outALU, out=inD, out=outM, zr=zrALU, ng=ngALU);
+    
+    //1.7
+    Not(in=zrALU, out=notZr);
+    Not(in=ngALU, out=notNg);
+    And(a=notZr, b=notNg, out=psALU);
+    
+    And(a=instruction[1], b=zrALU, out=zrMatched);
+    And(a=instruction[2], b=ngALU, out=ngMatched);
+    And(a=instruction[0], b=psALU, out=psMatched);
+    
+    And(a=instructionC, b=zrMatched, out=jumpZR);
+    And(a=instructionC, b=ngMatched, out=jumpNG);
+    And(a=instructionC, b=psMatched, out=jumpPS);
+    Or(a=jumpZR, b=jumpNG, out=jumpZROrNG);
+    Or(a=jumpZROrNG, b=jumpPS, out=loadPC);
+    
+    //1.8
+    PC(in=outA, load=loadPC, inc=true, reset=reset, out[0..14]=pc);
+    
+    //1.9
+    And(a=instructionC, b=instruction[3], out=writeM);
+}
